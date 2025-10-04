@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ project.title }} | Your Name</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- External Libraries -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    
+    <!-- Additional styles for project detail page -->
+    <style>
+        .project-hero {
+            padding: 8rem 1.5rem 4rem;
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .project-hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 15px rgba(192, 132, 252, 0.3);
+        }
+        
+        .project-hero .subtitle {
+            font-size: 1.25rem;
+            color: #c084fc;
+            margin-bottom: 3rem;
+        }
+        
+        .project-image {
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            border-radius: 0.5rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            margin: 0 auto 4rem;
+            display: block;
+        }
+        
+        .project-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        
+        .project-main {
+            color: #d1d5db;
+            line-height: 1.8;
+        }
+        
+        .project-main h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .project-main h2:first-child {
+            margin-top: 0;
+        }
+        
+        .project-main p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .project-sidebar {
+            background: rgba(31, 41, 55, 0.5);
+            padding: 2rem;
+            border-radius: 0.5rem;
+            border: 1px solid #374151;
+            height: fit-content;
+            position: sticky;
+            top: 6rem;
+        }
+        
+        .project-sidebar h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+        
+        .tech-list {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 2rem;
+        }
+        
+        .tech-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: #d1d5db;
+        }
+        
+        .tech-list li i {
+            color: #c084fc;
+        }
+        
+        .project-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .project-links .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+        
+        .back-nav {
+            text-align: center;
+            margin: 4rem 0;
+        }
+        
+        @media (max-width: 768px) {
+            .project-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .project-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .project-sidebar {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="aurora-bg"></div>
+
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="/#home" class="logo">Your Name</a>
+            <ul class="nav-links">
+                <li><a href="/#about">About</a></li>
+                <li><a href="/#projects">Projects</a></li>
+                <li><a href="/#skills">Skills</a></li>
+                <li><a href="/#experience">Experience</a></li>
+                <li><a href="/#achievements">Achievements</a></li>
+                <li><a href="/#contact">Contact</a></li>
+            </ul>
+            <button class="mobile-menu-btn">
+                <i data-lucide="menu"></i>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Project Hero Section -->
+        <div class="project-hero" data-aos="fade-down">
+            <h1>{{ project.title }}</h1>
+            <p class="subtitle">{{ project.short_desc }}</p>
+            <img src="{{ project.image_url }}" alt="{{ project.title }}" class="project-image" data-aos="fade-up">
+        </div>
+
+        <!-- Project Content -->
+        <div class="project-content">
+            <div class="project-main" data-aos="fade-right">
+                <h2>Project Overview</h2>
+                <p>{{ project.overview }}</p>
+                
+                <h2>Challenges & Solutions</h2>
+                <p>{{ project.challenges }}</p>
+            </div>
+
+            <div class="project-sidebar" data-aos="fade-left">
+                <h3>Tech Stack</h3>
+                <ul class="tech-list">
+                    {% for tech in project.tech_stack %}
+                    <li>
+                        <i data-lucide="check-circle"></i>
+                        {{ tech }}
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                <div class="project-links">
+                    <a href="{{ project.github_url }}" target="_blank" class="btn btn-secondary">
+                        <i data-lucide="github"></i>
+                        View Code
+                    </a>
+                    <a href="{{ project.demo_url }}" target="_blank" class="btn btn-primary">
+                        <i data-lucide="external-link"></i>
+                        Live Demo
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Back Navigation -->
+        <div class="back-nav" data-aos="fade-up">
+            <a href="/projects" class="btn btn-secondary">← Back to All Projects</a>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 [Your Name]. Crafted with passion.</p>
+    </footer>
+
+    <!-- External Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Initialize libraries -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Lucide icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+            
+            // Initialize AOS
+            if (typeof AOS !== 'undefined') {
+                AOS.init({ 
+                    duration: 800, 
+                    once: true, 
+                    offset: 50 
+                });
+            }
+        });
+    </script>
+</body>
+</html>
