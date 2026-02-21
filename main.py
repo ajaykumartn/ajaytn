@@ -59,8 +59,22 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
 MAX_FILE_SIZE = 16 * 1024 * 1024  # 16MB
 DATA_FILE = str(BASE_DIR / 'data' / 'portfolio_data.json')
 
-# Create upload folder if it doesn't exist
+# Create necessary directories on startup
 UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
+(BASE_DIR / 'data').mkdir(parents=True, exist_ok=True)
+
+# Ensure data file exists
+if not Path(DATA_FILE).exists():
+    # Create default empty data structure
+    default_data = {
+        "about": {},
+        "projects": [],
+        "skills": {},
+        "experience": [],
+        "achievements": {}
+    }
+    with open(DATA_FILE, 'w') as f:
+        json.dump(default_data, f, indent=2)
 
 # Pydantic models
 class LoginRequest(BaseModel):
