@@ -4,7 +4,7 @@ services:
   - type: web
     name: portfolio-app
     env: python
-    region: oregon
+    region: singapore  # Changed to match your existing services
     plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
@@ -17,16 +17,6 @@ services:
         value: admin
       - key: ADMIN_PASSWORD
         sync: false  # Set this in Render dashboard
-      - key: APP_URL
-        value: https://portfolio-app.onrender.com  # Update with your actual URL
     
-  # Keep-alive cron job (runs every 14 minutes)
-  - type: cron
-    name: portfolio-keepalive
-    env: python
-    schedule: "*/14 * * * *"  # Every 14 minutes
-    buildCommand: pip install requests
-    startCommand: python keep_alive.py
-    envVars:
-      - key: APP_URL
-        value: https://portfolio-app.onrender.com  # Update with your actual URL
+  # Note: Keep-alive is handled by FREE UptimeRobot instead of paid Render cron
+  # See UPTIMEROBOT_SETUP.md for setup instructions
