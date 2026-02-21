@@ -29,13 +29,7 @@ app = FastAPI(
     redoc_url="/api/redoc"
 )
 
-# Add compression middleware
-app.add_middleware(GZipMiddleware, minimum_size=1000)
-
-# Add session middleware
-app.add_middleware(SessionMiddleware, secret_key=os.getenv('SECRET_KEY', 'your-secret-key-change-this'))
-
-# Add CORS middleware
+# Add CORS middleware (must be before other middleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -44,17 +38,26 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount static files
-app.mount("/static", StaticFiles(directory="static"), name="static")
+# Add compression middleware
+app.add_middleware(GZipMiddleware, minimum_size=1000)
+
+# Add session middleware
+app.add_middleware(SessionMiddleware, secret_key=os.getenv('SECRET_KEY', 'your-secret-key-change-this'))
+
+# Get the base directory
+BASE_DIR = Path(__file__).resolve().parent
+
+# Mount static files (must be before routes)
+app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 
 # Templates
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 # Configuration
-UPLOAD_FOLDER = Path("static/uploads/projects")
+UPLOAD_FOLDER = BASE_DIR / "static" / "uploads" / "projects"
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
 MAX_FILE_SIZE = 16 * 1024 * 1024  # 16MB
-DATA_FILE = 'data/portfolio_data.json'
+DATA_FILE = str(BASE_DIR / 'data' / 'portfolio_data.json')
 
 # Create upload folder if it doesn't exist
 UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
@@ -117,7 +120,8 @@ def load_portfolio_data():
 
 def save_portfolio_data(data):
     """Save portfolio data to JSON file and clear cache"""
-    os.makedirs('data', exist_ok=True)
+    data_dir = BASE_DIR / 'data'
+    data_dir.mkdir(exist_ok=True)
     with open(DATA_FILE, 'w') as f:
         json.dump(data, f, indent=2)
     # Clear cache after saving
