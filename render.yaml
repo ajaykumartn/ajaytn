@@ -1,0 +1,32 @@
+# Render Blueprint for automatic deployment
+services:
+  # Main web service
+  - type: web
+    name: portfolio-app
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ADMIN_USERNAME
+        value: admin
+      - key: ADMIN_PASSWORD
+        sync: false  # Set this in Render dashboard
+      - key: APP_URL
+        value: https://portfolio-app.onrender.com  # Update with your actual URL
+    
+  # Keep-alive cron job (runs every 14 minutes)
+  - type: cron
+    name: portfolio-keepalive
+    env: python
+    schedule: "*/14 * * * *"  # Every 14 minutes
+    buildCommand: pip install requests
+    startCommand: python keep_alive.py
+    envVars:
+      - key: APP_URL
+        value: https://portfolio-app.onrender.com  # Update with your actual URL

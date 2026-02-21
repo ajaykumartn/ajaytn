@@ -58,74 +58,8 @@ function initLibraries() {
 
 // Enhanced Particles.js initialization
 function initParticles() {
-    const particlesContainer = document.getElementById('particles-js');
-    
-    if (particlesContainer && typeof particlesJS !== 'undefined') {
-        console.log('🌟 Initializing enhanced particles...');
-        
-        particlesJS('particles-js', {
-            particles: {
-                number: {
-                    value: 120,
-                    density: { enable: true, value_area: 800 }
-                },
-                color: { 
-                    value: ['#c084fc', '#ec4899', '#8b5cf6', '#a855f7'] 
-                },
-                shape: { 
-                    type: ['circle', 'triangle'],
-                    stroke: { width: 0, color: '#000000' }
-                },
-                opacity: {
-                    value: 0.6,
-                    random: true,
-                    anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
-                },
-                size: {
-                    value: 4,
-                    random: true,
-                    anim: { enable: true, speed: 2, size_min: 0.1, sync: false }
-                },
-                line_linked: {
-                    enable: true,
-                    distance: 150,
-                    color: '#c084fc',
-                    opacity: 0.3,
-                    width: 1
-                },
-                move: {
-                    enable: true,
-                    speed: 3,
-                    direction: 'none',
-                    random: true,
-                    straight: false,
-                    out_mode: 'out',
-                    bounce: false,
-                    attract: { enable: true, rotateX: 600, rotateY: 1200 }
-                }
-            },
-            interactivity: {
-                detect_on: 'canvas',
-                events: {
-                    onhover: { enable: true, mode: 'bubble' },
-                    onclick: { enable: true, mode: 'push' },
-                    resize: true
-                },
-                modes: {
-                    grab: { distance: 400, line_linked: { opacity: 1 } },
-                    bubble: { distance: 250, size: 8, duration: 2, opacity: 0.8, speed: 3 },
-                    repulse: { distance: 200, duration: 0.4 },
-                    push: { particles_nb: 6 },
-                    remove: { particles_nb: 2 }
-                }
-            },
-            retina_detect: true
-        });
-        
-        console.log('✓ Enhanced particles initialized');
-    } else {
-        console.warn('✗ Particles.js or container not found');
-    }
+    // Particles removed as per user request
+    console.log('✓ Particles disabled');
 }
 
 // Typing animation
@@ -136,10 +70,10 @@ function initTypingAnimation() {
         console.log('Starting typing animation...');
         
         const words = [
-            'AI & Machine Learning Enthusiast',
-            'B.Tech CSE Student', 
-            'A Creative Problem Solver',
-            'A Lifelong Learner'
+            'AI/ML DEVELOPER',
+            'DATA SCIENTIST',
+            'PROBLEM SOLVER',
+            'TECH ENTHUSIAST'
         ];
         
         let wordIndex = 0;
@@ -297,6 +231,9 @@ function initScrollAnimations() {
             if (entry.isIntersecting) {
                 entry.target.classList.add('animate');
                 
+                // Change aurora background based on section
+                changeAuroraColor(entry.target.id);
+                
                 // Add stagger effect for grouped elements
                 if (entry.target.classList.contains('skill-card')) {
                     const index = Array.from(entry.target.parentNode.children).indexOf(entry.target);
@@ -309,15 +246,41 @@ function initScrollAnimations() {
                 }
             }
         });
-    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    }, { threshold: 0.3, rootMargin: '0px 0px -50px 0px' });
     
     // Observe elements for animation
     const elementsToAnimate = document.querySelectorAll(
-        '.section-heading, .about-image, .project-card, .skill-card, .timeline-item, .achievement-item, .contact-form'
+        '.section-heading, .about-image, .about-text, .project-card, .skill-card, .timeline-item, .achievement-item, .contact-form'
     );
     
     elementsToAnimate.forEach(el => animationObserver.observe(el));
+    
+    // Observe sections for aurora color change
+    const sections = document.querySelectorAll('section');
+    sections.forEach(section => animationObserver.observe(section));
+    
     console.log('✓ Scroll animations initialized');
 }
 
-// Initialize mous
+// Change aurora background color based on section
+function changeAuroraColor(sectionId) {
+    const auroraBg = document.querySelector('.aurora-bg');
+    if (!auroraBg) return;
+    
+    const colorSchemes = {
+        'home': 'linear-gradient(125deg, #0c0a18, #1a1a3d, #3c1e5a, #5e2f75)',
+        'about': 'linear-gradient(125deg, #1a1a3d, #2d1b4e, #4a1e6b, #5e2f75)',
+        'projects': 'linear-gradient(125deg, #0c0a18, #1a1a3d, #2d1b4e, #3c1e5a)',
+        'skills': 'linear-gradient(125deg, #2d1b4e, #3c1e5a, #5e2f75, #7c3aed)',
+        'experience': 'linear-gradient(125deg, #1a1a3d, #2d1b4e, #3c1e5a, #4a1e6b)',
+        'achievements': 'linear-gradient(125deg, #0c0a18, #1a1a3d, #3c1e5a, #5e2f75)',
+        'contact': 'linear-gradient(125deg, #2d1b4e, #3c1e5a, #5e2f75, #1a1a3d)'
+    };
+    
+    if (colorSchemes[sectionId]) {
+        auroraBg.style.background = colorSchemes[sectionId];
+        auroraBg.style.backgroundSize = '400% 400%';
+    }
+}
+
+// Initialize mouse tracking
