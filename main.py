@@ -169,19 +169,25 @@ PROJECTS = {
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     """Render the main portfolio page"""
-    portfolio_data = load_portfolio_data()
-    projects_list = portfolio_data.get('projects', list(PROJECTS.values()))
-    latest_projects = projects_list[:4]
-    
-    return templates.TemplateResponse("index_new.html", {
-        "request": request,
-        "projects": latest_projects,
-        "total_projects": len(projects_list),
-        "about": portfolio_data.get('about', {}),
-        "skills": portfolio_data.get('skills', {}),
-        "experience": portfolio_data.get('experience', []),
-        "achievements": portfolio_data.get('achievements', {})
-    })
+    try:
+        portfolio_data = load_portfolio_data()
+        projects_list = portfolio_data.get('projects', list(PROJECTS.values()))
+        latest_projects = projects_list[:4]
+        
+        return templates.TemplateResponse("index_new.html", {
+            "request": request,
+            "projects": latest_projects,
+            "total_projects": len(projects_list),
+            "about": portfolio_data.get('about', {}),
+            "skills": portfolio_data.get('skills', {}),
+            "experience": portfolio_data.get('experience', []),
+            "achievements": portfolio_data.get('achievements', {})
+        })
+    except Exception as e:
+        print(f"Error in home route: {str(e)}")
+        print(f"DATA_FILE path: {DATA_FILE}")
+        print(f"File exists: {Path(DATA_FILE).exists()}")
+        raise HTTPException(status_code=500, detail=f"Error loading page: {str(e)}")
 
 @app.get("/contact", response_class=HTMLResponse)
 async def contact(request: Request):
@@ -448,6 +454,7 @@ async def upload_image(image: UploadFile = File(...), _: bool = Depends(get_curr
     return {"success": True, "image_url": image_url}
 
 @app.get("/health")
+@app.head("/health")
 async def health_check():
     """Health check endpoint"""
     return {"status": "ok", "message": "FastAPI app is running"}
