@@ -21,6 +21,9 @@ from functools import lru_cache
 # Load environment variables
 load_dotenv()
 
+# Get the base directory
+BASE_DIR = Path(__file__).resolve().parent
+
 # Initialize FastAPI app
 app = FastAPI(
     title="Portfolio API", 
@@ -29,7 +32,10 @@ app = FastAPI(
     redoc_url="/api/redoc"
 )
 
-# Add CORS middleware (must be before other middleware)
+# Mount static files FIRST (before middleware)
+app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
+
+# Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -43,12 +49,6 @@ app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 # Add session middleware
 app.add_middleware(SessionMiddleware, secret_key=os.getenv('SECRET_KEY', 'your-secret-key-change-this'))
-
-# Get the base directory
-BASE_DIR = Path(__file__).resolve().parent
-
-# Mount static files (must be before routes)
-app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 
 # Templates
 templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
