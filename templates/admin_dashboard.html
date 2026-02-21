@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0c0a18, #1a1a3d);
+            min-height: 100vh;
+        }
+        
+        .admin-header {
+            background: rgba(31, 41, 55, 0.8);
+            border-bottom: 1px solid rgba(192, 132, 252, 0.3);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .admin-header h1 {
+            color: #c084fc;
+            font-size: 1.75rem;
+        }
+        
+        .btn-logout {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            color: #fca5a5;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-logout:hover {
+            background: rgba(239, 68, 68, 0.3);
+        }
+        
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid rgba(192, 132, 252, 0.2);
+        }
+        
+        .tab {
+            padding: 1rem 2rem;
+            background: transparent;
+            border: none;
+            color: #9ca3af;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            color: #c084fc;
+            border-bottom-color: #c084fc;
+        }
+        
+        .tab:hover {
+            color: #c084fc;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .section-card {
+            background: linear-gradient(135deg, rgba(31, 41, 55, 0.6), rgba(55, 65, 81, 0.4));
+            border: 1px solid rgba(192, 132, 252, 0.3);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .section-card h2 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            color: #d1d5db;
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border-radius: 0.5rem;
+            background: rgba(31, 41, 55, 0.8);
+            border: 1px solid rgba(192, 132, 252, 0.3);
+            color: white;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #c084fc;
+            box-shadow: 0 0 0 3px rgba(192, 132, 252, 0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #c084fc, #ec4899);
+            border: none;
+            color: white;
+            padding: 0.875rem 2rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(192, 132, 252, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(96, 165, 250, 0.2);
+            border: 1px solid rgba(96, 165, 250, 0.5);
+            color: #60a5fa;
+            padding: 0.875rem 2rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(96, 165, 250, 0.3);
+        }
+        
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            color: #fca5a5;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.3);
+        }
+        
+        .items-list {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .item-card {
+            background: rgba(31, 41, 55, 0.5);
+            border: 1px solid rgba(192, 132, 252, 0.2);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .item-info h3 {
+            color: white;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .item-info p {
+            color: #9ca3af;
+            font-size: 0.95rem;
+        }
+        
+        .item-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .success-message {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.5);
+            color: #6ee7b7;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+        
+        .success-message.show {
+            display: block;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .tabs {
+                overflow-x: auto;
+            }
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, rgba(31, 41, 55, 0.95), rgba(55, 65, 81, 0.9));
+            border: 1px solid rgba(192, 132, 252, 0.3);
+            border-radius: 1rem;
+            padding: 2rem;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .modal-header h2 {
+            color: white;
+            font-size: 1.75rem;
+        }
+        
+        .btn-close {
+            background: none;
+            border: none;
+            color: #9ca3af;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: color 0.3s ease;
+        }
+        
+        .btn-close:hover {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-header">
+        <h1>Admin Dashboard</h1>
+        <button class="btn-logout" onclick="logout()">
+            <i data-lucide="log-out"></i> Logout
+        </button>
+    </div>
+    
+    <div class="dashboard-container">
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('about')">About</button>
+            <button class="tab" onclick="switchTab('projects')">Projects</button>
+            <button class="tab" onclick="switchTab('skills')">Skills</button>
+            <button class="tab" onclick="switchTab('experience')">Experience</button>
+            <button class="tab" onclick="switchTab('achievements')">Achievements</button>
+        </div>
+        
+        <!-- About Tab -->
+        <div id="about-tab" class="tab-content active">
+            <div class="section-card">
+                <h2><i data-lucide="user"></i> About Section</h2>
+                <div id="about-success" class="success-message"></div>
+                <form id="about-form">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" name="name" value="Ajay Kumar" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" name="title" value="AI/ML Developer & Tech Enthusiast" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Description (Paragraph 1)</label>
+                        <textarea name="desc1" required>I'm a passionate Computer Science student specializing in Artificial Intelligence and Machine Learning. My journey in tech is driven by a desire to create intelligent systems that solve real-world problems and make a meaningful impact.</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Description (Paragraph 2)</label>
+                        <textarea name="desc2" required>From data collection and preprocessing to model training and deployment, I thrive on working across the entire machine learning pipeline. I'm proficient in Python and its powerful libraries like TensorFlow, PyTorch, and Scikit-learn.</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Description (Paragraph 3)</label>
+                        <textarea name="desc3" required>I believe in continuous learning, collaborative innovation, and building solutions that matter. Currently seeking opportunities to apply my skills and contribute to impactful AI/ML projects.</textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Years Experience</label>
+                            <input type="text" name="years" value="3+" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Projects Completed</label>
+                            <input type="text" name="projects_count" value="10+" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Projects Tab -->
+        <div id="projects-tab" class="tab-content">
+            <div class="section-card">
+                <h2><i data-lucide="folder"></i> Manage Projects</h2>
+                <button class="btn-secondary" style="margin-bottom: 1.5rem;" onclick="showAddProjectModal()">
+                    <i data-lucide="plus"></i> Add New Project
+                </button>
+                <div class="items-list" id="projects-list">
+                    <!-- Projects will be loaded here -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Skills Tab -->
+        <div id="skills-tab" class="tab-content">
+            <div class="section-card">
+                <h2><i data-lucide="code"></i> Manage Skills</h2>
+                <div id="skills-success" class="success-message"></div>
+                <form id="skills-form">
+                    <div class="form-group">
+                        <label>Languages (comma separated)</label>
+                        <input type="text" name="languages" value="Python, JavaScript, SQL" required>
+                    </div>
+                    <div class="form-group">
+                        <label>AI/ML Frameworks (comma separated)</label>
+                        <input type="text" name="aiml" value="TensorFlow, PyTorch, Scikit-learn, Keras" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Data Science Tools (comma separated)</label>
+                        <input type="text" name="datascience" value="Pandas, NumPy, OpenCV, Matplotlib" required>
+                    </div>
+                    <div class="form-group">
+                        <label>DevOps & Tools (comma separated)</label>
+                        <input type="text" name="tools" value="Git & GitHub, Docker, AWS" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Experience Tab -->
+        <div id="experience-tab" class="tab-content">
+            <div class="section-card">
+                <h2><i data-lucide="briefcase"></i> Manage Experience</h2>
+                <button class="btn-secondary" style="margin-bottom: 1.5rem;" onclick="showAddExperience()">
+                    <i data-lucide="plus"></i> Add New Experience
+                </button>
+                <div class="items-list" id="experience-list">
+                    <!-- Experience items will be loaded here -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Achievements Tab -->
+        <div id="achievements-tab" class="tab-content">
+            <div class="section-card">
+                <h2><i data-lucide="award"></i> Manage Achievements</h2>
+                <div id="achievements-success" class="success-message"></div>
+                <form id="achievements-form">
+                    <h3 style="color: #c084fc; margin-bottom: 1rem;">Achievements</h3>
+                    <div class="form-group">
+                        <label>Achievement 1 Title</label>
+                        <input type="text" name="ach1_title" value="Winner, Smart India Hackathon 2024" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Achievement 1 Description</label>
+                        <input type="text" name="ach1_desc" value="Developed an AI-powered solution for waste management." required>
+                    </div>
+                    <div class="form-group">
+                        <label>Achievement 2 Title</label>
+                        <input type="text" name="ach2_title" value="5-Star Coder on CodeChef" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Achievement 2 Description</label>
+                        <input type="text" name="ach2_desc" value="Consistently ranked in the top tier of competitive programmers." required>
+                    </div>
+                    
+                    <h3 style="color: #c084fc; margin: 2rem 0 1rem;">Certifications</h3>
+                    <div class="form-group">
+                        <label>Certification 1 Title</label>
+                        <input type="text" name="cert1_title" value="Deep Learning Specialization" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Certification 1 Details</label>
+                        <input type="text" name="cert1_details" value="Coursera & deeplearning.ai - 2024" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Certification 2 Title</label>
+                        <input type="text" name="cert2_title" value="Machine Learning by Stanford University" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Certification 2 Details</label>
+                        <input type="text" name="cert2_details" value="Coursera - 2023" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Project Modal -->
+    <div id="project-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Add New Project</h2>
+                <button class="btn-close" onclick="closeProjectModal()">&times;</button>
+            </div>
+            <form id="project-form">
+                <input type="hidden" id="project-id" name="id">
+                <div class="form-group">
+                    <label>Project Title</label>
+                    <input type="text" name="title" id="project-title" required>
+                </div>
+                <div class="form-group">
+                    <label>Short Description</label>
+                    <input type="text" name="short_desc" id="project-short-desc" required>
+                </div>
+                <div class="form-group">
+                    <label>Project Image</label>
+                    <div style="display: flex; gap: 1rem; align-items: end;">
+                        <div style="flex: 1;">
+                            <input type="url" name="image_url" id="project-image" placeholder="https://example.com/image.jpg or upload below" required>
+                        </div>
+                        <div>
+                            <input type="file" id="image-upload" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+                            <button type="button" class="btn-secondary" onclick="document.getElementById('image-upload').click()">
+                                <i data-lucide="upload"></i> Upload Image
+                            </button>
+                        </div>
+                    </div>
+                    <div id="upload-preview" style="margin-top: 1rem; display: none;">
+                        <img id="preview-image" style="max-width: 200px; border-radius: 0.5rem; border: 1px solid rgba(192, 132, 252, 0.3);">
+                    </div>
+                    <small style="color: #9ca3af; display: block; margin-top: 0.5rem;">You can either enter an image URL or upload an image from your computer</small>
+                </div>
+                <div class="form-group">
+                    <label>Overview</label>
+                    <textarea name="overview" id="project-overview" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Challenges & Solutions</label>
+                    <textarea name="challenges" id="project-challenges" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Tech Stack (comma separated)</label>
+                    <input type="text" name="tech_stack" id="project-tech" placeholder="Python, TensorFlow, Flask" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>GitHub URL</label>
+                        <input type="url" name="github_url" id="project-github" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Demo URL</label>
+                        <input type="url" name="demo_url" id="project-demo" required>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button type="submit" class="btn-primary">Save Project</button>
+                    <button type="button" class="btn-secondary" onclick="closeProjectModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        let portfolioData = {};
+        
+        // Load data on page load
+        async function loadData() {
+            try {
+                const response = await fetch('/admin/api/data');
+                portfolioData = await response.json();
+                populateForms();
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        }
+        
+        function populateForms() {
+            // Populate About form
+            if (portfolioData.about) {
+                document.querySelector('[name="name"]').value = portfolioData.about.name || '';
+                document.querySelector('[name="title"]').value = portfolioData.about.title || '';
+                document.querySelector('[name="desc1"]').value = portfolioData.about.description?.[0] || '';
+                document.querySelector('[name="desc2"]').value = portfolioData.about.description?.[1] || '';
+                document.querySelector('[name="desc3"]').value = portfolioData.about.description?.[2] || '';
+                document.querySelector('[name="years"]').value = portfolioData.about.stats?.years || '';
+                document.querySelector('[name="projects_count"]').value = portfolioData.about.stats?.projects || '';
+            }
+            
+            // Populate Skills form
+            if (portfolioData.skills) {
+                document.querySelector('[name="languages"]').value = portfolioData.skills.languages?.join(', ') || '';
+                document.querySelector('[name="aiml"]').value = portfolioData.skills.aiml?.join(', ') || '';
+                document.querySelector('[name="datascience"]').value = portfolioData.skills.datascience?.join(', ') || '';
+                document.querySelector('[name="tools"]').value = portfolioData.skills.tools?.join(', ') || '';
+            }
+            
+            // Populate Achievements form
+            if (portfolioData.achievements) {
+                const achs = portfolioData.achievements.achievements || [];
+                const certs = portfolioData.achievements.certifications || [];
+                
+                if (achs[0]) {
+                    document.querySelector('[name="ach1_title"]').value = achs[0].title || '';
+                    document.querySelector('[name="ach1_desc"]').value = achs[0].description || '';
+                }
+                if (achs[1]) {
+                    document.querySelector('[name="ach2_title"]').value = achs[1].title || '';
+                    document.querySelector('[name="ach2_desc"]').value = achs[1].description || '';
+                }
+                if (certs[0]) {
+                    document.querySelector('[name="cert1_title"]').value = certs[0].title || '';
+                    document.querySelector('[name="cert1_details"]').value = certs[0].details || '';
+                }
+                if (certs[1]) {
+                    document.querySelector('[name="cert2_title"]').value = certs[1].title || '';
+                    document.querySelector('[name="cert2_details"]').value = certs[1].details || '';
+                }
+            }
+            
+            // Load experience items
+            loadExperienceList();
+        }
+        
+        function loadExperienceList() {
+            const list = document.getElementById('experience-list');
+            if (!portfolioData.experience || portfolioData.experience.length === 0) {
+                list.innerHTML = '<p style="color: #9ca3af;">No experience items yet.</p>';
+                return;
+            }
+            
+            list.innerHTML = portfolioData.experience.map((exp, index) => `
+                <div class="item-card">
+                    <div class="item-info">
+                        <h3>${exp.title}</h3>
+                        <p>${exp.company} • ${exp.date}</p>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn-secondary" onclick="editExperience(${index})">Edit</button>
+                        <button class="btn-danger" onclick="deleteExperience(${index})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        async function loadProjectsList() {
+            try {
+                const response = await fetch('/admin/api/projects');
+                const data = await response.json();
+                const projects = data.projects || [];
+                
+                const list = document.getElementById('projects-list');
+                if (projects.length === 0) {
+                    list.innerHTML = '<p style="color: #9ca3af;">No projects yet.</p>';
+                    return;
+                }
+                
+                list.innerHTML = projects.map(project => `
+                    <div class="item-card">
+                        <div class="item-info">
+                            <h3>${project.title}</h3>
+                            <p>${project.short_desc}</p>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn-secondary" onclick='editProject(${JSON.stringify(project)})'>Edit</button>
+                            <button class="btn-danger" onclick="deleteProject('${project.id}')">Delete</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading projects:', error);
+            }
+        }
+        
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.add('active');
+            event.target.classList.add('active');
+            
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+        
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = '/admin/logout';
+            }
+        }
+        
+        function showAddProject() {
+            alert('Add Project functionality - To be implemented');
+        }
+        
+        function showAddProjectModal() {
+            document.getElementById('modal-title').textContent = 'Add New Project';
+            document.getElementById('project-form').reset();
+            document.getElementById('project-id').value = '';
+            document.getElementById('project-modal').classList.add('show');
+        }
+        
+        function closeProjectModal() {
+            document.getElementById('project-modal').classList.remove('show');
+        }
+        
+        function editProject(project) {
+            document.getElementById('modal-title').textContent = 'Edit Project';
+            document.getElementById('project-id').value = project.id;
+            document.getElementById('project-title').value = project.title;
+            document.getElementById('project-short-desc').value = project.short_desc;
+            document.getElementById('project-image').value = project.image_url;
+            document.getElementById('project-overview').value = project.overview;
+            document.getElementById('project-challenges').value = project.challenges;
+            document.getElementById('project-tech').value = project.tech_stack.join(', ');
+            document.getElementById('project-github').value = project.github_url;
+            document.getElementById('project-demo').value = project.demo_url;
+            
+            // Show preview if image URL exists
+            if (project.image_url) {
+                document.getElementById('preview-image').src = project.image_url;
+                document.getElementById('upload-preview').style.display = 'block';
+            }
+            
+            document.getElementById('project-modal').classList.add('show');
+        }
+        
+        async function deleteProject(projectId) {
+            if (!confirm('Are you sure you want to delete this project?')) return;
+            
+            try {
+                const response = await fetch(`/admin/api/projects/${projectId}`, {
+                    method: 'DELETE'
+                });
+                const result = await response.json();
+                
+                if (result.success) {
+                    loadProjectsList();
+                } else {
+                    alert('Error deleting project: ' + result.message);
+                }
+            } catch (error) {
+                alert('Error deleting project: ' + error.message);
+            }
+        }
+        
+        async function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('preview-image').src = e.target.result;
+                document.getElementById('upload-preview').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+            
+            // Upload to server
+            const formData = new FormData();
+            formData.append('image', file);
+            
+            try {
+                // Show loading state
+                const uploadBtn = event.target.parentElement.querySelector('.btn-secondary');
+                const originalText = uploadBtn.innerHTML;
+                uploadBtn.innerHTML = '<i data-lucide="loader"></i> Uploading...';
+                uploadBtn.disabled = true;
+                
+                const response = await fetch('/admin/api/upload-image', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Set the image URL in the input field
+                    document.getElementById('project-image').value = result.image_url;
+                    alert('Image uploaded successfully!');
+                } else {
+                    alert('Error uploading image: ' + result.message);
+                }
+                
+                // Restore button
+                uploadBtn.innerHTML = originalText;
+                uploadBtn.disabled = false;
+                
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            } catch (error) {
+                alert('Error uploading image: ' + error.message);
+            }
+        }
+        
+        function showAddExperience() {
+            alert('Add Experience functionality - To be implemented');
+        }
+        
+        function editExperience(index) {
+            alert('Edit Experience functionality - To be implemented');
+        }
+        
+        function deleteExperience(index) {
+            if (confirm('Are you sure you want to delete this experience?')) {
+                portfolioData.experience.splice(index, 1);
+                saveExperience();
+            }
+        }
+        
+        async function saveExperience() {
+            try {
+                const response = await fetch('/admin/api/experience', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ experience: portfolioData.experience })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    loadExperienceList();
+                }
+            } catch (error) {
+                console.error('Error saving experience:', error);
+            }
+        }
+        
+        // Form submissions
+        document.getElementById('about-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            
+            try {
+                const response = await fetch('/admin/api/about', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                
+                const successMsg = document.getElementById('about-success');
+                successMsg.textContent = result.message;
+                successMsg.classList.add('show');
+                setTimeout(() => successMsg.classList.remove('show'), 3000);
+            } catch (error) {
+                alert('Error saving data: ' + error.message);
+            }
+        });
+        
+        document.getElementById('skills-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            
+            try {
+                const response = await fetch('/admin/api/skills', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                
+                const successMsg = document.getElementById('skills-success');
+                successMsg.textContent = result.message;
+                successMsg.classList.add('show');
+                setTimeout(() => successMsg.classList.remove('show'), 3000);
+            } catch (error) {
+                alert('Error saving data: ' + error.message);
+            }
+        });
+        
+        document.getElementById('achievements-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            
+            try {
+                const response = await fetch('/admin/api/achievements', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                
+                const successMsg = document.getElementById('achievements-success');
+                successMsg.textContent = result.message;
+                successMsg.classList.add('show');
+                setTimeout(() => successMsg.classList.remove('show'), 3000);
+            } catch (error) {
+                alert('Error saving data: ' + error.message);
+            }
+        });
+        
+        // Project form submission
+        document.getElementById('project-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            const projectId = document.getElementById('project-id').value;
+            
+            try {
+                let response;
+                if (projectId) {
+                    // Update existing project
+                    response = await fetch(`/admin/api/projects/${projectId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                } else {
+                    // Add new project
+                    response = await fetch('/admin/api/projects', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                }
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    closeProjectModal();
+                    loadProjectsList();
+                    alert(result.message);
+                } else {
+                    alert('Error: ' + result.message);
+                }
+            } catch (error) {
+                alert('Error saving project: ' + error.message);
+            }
+        });
+        
+        // Initialize
+        loadData();
+        loadProjectsList();
+        
+        // Add image URL preview listener
+        document.getElementById('project-image').addEventListener('input', function(e) {
+            const url = e.target.value;
+            if (url && (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('/'))) {
+                document.getElementById('preview-image').src = url;
+                document.getElementById('upload-preview').style.display = 'block';
+            }
+        });
+        
+        // Initialize icons
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>

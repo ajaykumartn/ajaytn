@@ -19,37 +19,46 @@
     <!-- Animated Background -->
     <div class="aurora-bg"></div>
 
-    <!-- Header -->
-    <header>
-        <nav>
-            <a href="#home" class="logo">AC</a>
-            <ul class="nav-links">
-                <li><a href="#about">About</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#experience">Experience</a></li>
-                <li><a href="#achievements">Achievements</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-            <button class="mobile-menu-btn">
-                <i data-lucide="menu"></i>
-            </button>
-        </nav>
-    </header>
+    <button class="mobile-menu-btn">
+        <i data-lucide="menu"></i>
+    </button>
 
     <main>
         <!-- Hero Section -->
         <section id="home">
-            <div id="particles-js"></div>
+            <!-- Decorative half circle -->
+            <div class="hero-decoration"></div>
+            
+            <!-- Vertical Navigation -->
+            <nav class="nav-vertical">
+                <ul class="nav-links">
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#skills">Skills</a></li>
+                    <li><a href="#experience">Experience</a></li>
+                    <li><a href="#achievements">Achievements</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+            </nav>
+            
             <div class="hero-content">
-                <h1>Hi, I'm Ajay</h1>
-                <p class="subtitle">
-                    <span id="typing-text"></span><span class="typing-cursor"></span>
-                </p>
-                <div class="hero-buttons">
-                    <a href="#projects" class="btn btn-primary">View My Work</a>
-                    <a href="#" class="btn btn-secondary">Download CV</a>
+                <div class="hero-text">
+                    <h1>Hi, I'm Ajay!</h1>
+                    <p class="hero-description">
+                        I believe that AI/ML should be more than just algorithms—it should effectively solve problems and engage users. My goal is to create intelligent systems that resonate and leave a lasting impact.
+                    </p>
+                    <h2 class="hero-title-outline">
+                        <span id="typing-text"></span><span class="typing-cursor"></span>
+                    </h2>
+                    <a href="#projects" class="btn btn-primary">
+                        View my work 
+                        <span class="btn-icon">
+                            <i data-lucide="arrow-right"></i>
+                        </span>
+                    </a>
                 </div>
+            </div>
+            <div class="hero-image-fixed">
+                <img src="{{ url_for('static', filename='images/ajay-profile.png') }}" alt="Ajay Kumar">
             </div>
         </section>
 
@@ -57,11 +66,29 @@
         <section id="about">
             <h2 class="section-heading">About Me</h2>
             <div class="about-content">
-                <img src="https://placehold.co/400x400/0c0a18/e9d5ff?text=Your\nPhoto" alt="Your Name" class="about-image">
+                <div class="about-image-wrapper">
+                    <img src="https://placehold.co/400x400/0c0a18/e9d5ff?text=Your\nPhoto" alt="{{ about.name }}" class="about-image">
+                    <div class="about-image-border"></div>
+                </div>
                 <div class="about-text">
-                    <p>I'm a third-year Computer Science student at [Your University Name], specializing in Artificial Intelligence and Machine Learning. My passion lies in creating intelligent systems that solve complex, real-world problems through data.</p>
-                    <p>From data collection and preprocessing to model training and deployment, I enjoy working across the entire machine learning pipeline. I'm proficient in Python and its powerful libraries like TensorFlow and PyTorch, and I'm always eager to learn new technologies.</p>
-                    <p>I believe in collaborative work and continuous learning. I'm actively seeking internship opportunities to apply my skills and contribute to impactful projects.</p>
+                    <h3 class="about-subtitle">{{ about.title }}</h3>
+                    {% for desc in about.description %}
+                    <p>{{ desc }}</p>
+                    {% endfor %}
+                    <div class="about-stats">
+                        <div class="stat-item">
+                            <h4>{{ about.stats.years }}</h4>
+                            <p>Years Experience</p>
+                        </div>
+                        <div class="stat-item">
+                            <h4>{{ about.stats.projects }}</h4>
+                            <p>Projects Completed</p>
+                        </div>
+                        <div class="stat-item">
+                            <h4>{{ about.stats.technologies }}</h4>
+                            <p>Technologies</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -92,36 +119,99 @@
         <!-- Skills Section -->
         <section id="skills">
             <h2 class="section-heading">Technical Skills</h2>
-            <div class="skills-grid">
-                <div class="skill-card">Python</div>
-                <div class="skill-card">TensorFlow</div>
-                <div class="skill-card">PyTorch</div>
-                <div class="skill-card">Scikit-learn</div>
-                <div class="skill-card">Pandas</div>
-                <div class="skill-card">NumPy</div>
-                <div class="skill-card">OpenCV</div>
-                <div class="skill-card">SQL</div>
-                <div class="skill-card">Git & GitHub</div>
-                <div class="skill-card">Docker</div>
+            
+            <div class="skills-grid-container">
+                <div class="skill-category-card">
+                    <h3 class="category-title">
+                        <i data-lucide="code-2"></i>
+                        Languages
+                    </h3>
+                    <div class="skill-tags">
+                        {% for skill in skills.languages %}
+                        <div class="skill-tag">{{ skill }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="skill-category-card">
+                    <h3 class="category-title">
+                        <i data-lucide="brain"></i>
+                        AI/ML
+                    </h3>
+                    <div class="skill-tags">
+                        {% for skill in skills.aiml %}
+                        <div class="skill-tag">{{ skill }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="skill-category-card">
+                    <h3 class="category-title">
+                        <i data-lucide="database"></i>
+                        Data Science
+                    </h3>
+                    <div class="skill-tags">
+                        {% for skill in skills.datascience %}
+                        <div class="skill-tag">{{ skill }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="skill-category-card">
+                    <h3 class="category-title">
+                        <i data-lucide="git-branch"></i>
+                        Tools
+                    </h3>
+                    <div class="skill-tags">
+                        {% for skill in skills.tools %}
+                        <div class="skill-tag">{{ skill }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
         </section>
 
         <!-- Experience Section -->
         <section id="experience">
-            <h2 class="section-heading">Internship Experience</h2>
+            <h2 class="section-heading">Professional Experience</h2>
+            
             <div class="timeline">
+                {% for exp in experience %}
                 <div class="timeline-item">
-                    <p class="timeline-date">June 2024 - Aug 2024</p>
-                    <h3 class="timeline-title">Data Science Intern</h3>
-                    <p class="timeline-company">Tech Solutions Inc.</p>
-                    <div class="timeline-description">
-                        <ul>
-                            <li>Assisted with data cleaning and preprocessing for a customer churn model.</li>
-                            <li>Created data visualizations using Matplotlib to identify key trends.</li>
-                            <li>Contributed to a logistic regression model that achieved 85% accuracy.</li>
-                        </ul>
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <div>
+                                <p class="timeline-date">
+                                    <i data-lucide="calendar"></i>
+                                    {{ exp.date }}
+                                </p>
+                                <h3 class="timeline-title">{{ exp.title }}</h3>
+                                <p class="timeline-company">
+                                    <i data-lucide="building-2"></i>
+                                    {{ exp.company }}
+                                </p>
+                            </div>
+                            <div class="timeline-badge">{{ exp.duration }}</div>
+                        </div>
+                        <div class="timeline-description">
+                            <ul class="timeline-achievements">
+                                {% for achievement in exp.achievements %}
+                                <li>
+                                    <i data-lucide="check-circle-2"></i>
+                                    <span>{{ achievement }}</span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            <div class="timeline-skills">
+                                {% for skill in exp.skills %}
+                                <span class="skill-tag">{{ skill }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
         </section>
 
@@ -131,63 +221,55 @@
             <div class="achievements-grid">
                 <div class="achievement-category">
                     <h3><i data-lucide="award"></i> Achievements</h3>
+                    {% for ach in achievements.achievements %}
                     <div class="achievement-item">
-                        <h4>Winner, Smart India Hackathon 2024</h4>
-                        <p>Developed an AI-powered solution for waste management.</p>
+                        <h4>{{ ach.title }}</h4>
+                        <p>{{ ach.description }}</p>
                     </div>
-                    <div class="achievement-item">
-                        <h4>5-Star Coder on CodeChef</h4>
-                        <p>Consistently ranked in the top tier of competitive programmers.</p>
-                    </div>
+                    {% endfor %}
                 </div>
                 <div class="achievement-category">
                     <h3><i data-lucide="file-check-2"></i> Certifications</h3>
+                    {% for cert in achievements.certifications %}
                     <div class="achievement-item">
-                        <h4>Deep Learning Specialization</h4>
-                        <p>Coursera & deeplearning.ai - 2024</p>
+                        <h4>{{ cert.title }}</h4>
+                        <p>{{ cert.details }}</p>
                     </div>
-                    <div class="achievement-item">
-                        <h4>Machine Learning by Stanford University</h4>
-                        <p>Coursera - 2023</p>
-                    </div>
+                    {% endfor %}
                 </div>
-            </div>
-        </section>
-
-        <!-- Contact Section -->
-        <section id="contact">
-            <h2 class="section-heading">Get In Touch</h2>
-            <p style="text-align: center; margin-bottom: 3rem; color: #9ca3af;">I'm currently looking for new opportunities. Feel free to reach out!</p>
-            
-            <form id="contact-form" class="contact-form">
-                <div class="form-group">
-                    <label for="name">Your Name</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Your Email</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea id="message" name="message" rows="4" required></textarea>
-                </div>
-                <div style="text-align: center;">
-                    <button type="submit" id="submit-button" class="btn btn-primary">Send Message</button>
-                    <p id="form-status" style="margin-top: 1rem; height: 1.25rem;"></p>
-                </div>
-            </form>
-
-            <div class="social-links">
-                <a href="#"><i data-lucide="linkedin"></i></a>
-                <a href="#"><i data-lucide="github"></i></a>
             </div>
         </section>
     </main>
 
     <!-- Footer -->
-    <footer>
-        <p>&copy; 2025 Ajay. Crafted with passion.</p>
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3 class="footer-logo">Ajay Kumar</h3>
+                <p class="footer-tagline">AI/ML Developer | Building intelligent solutions for tomorrow</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="LinkedIn"><i data-lucide="linkedin"></i></a>
+                    <a href="#" aria-label="GitHub"><i data-lucide="github"></i></a>
+                    <a href="#" aria-label="Twitter"><i data-lucide="twitter"></i></a>
+                    <a href="#" aria-label="Email"><i data-lucide="mail"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#skills">Skills</a></li>
+                    <li><a href="#experience">Experience</a></li>
+                    <li><a href="#achievements">Achievements</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 Ajay Kumar. All rights reserved.</p>
+            <p class="footer-credit">Designed & Built with <i data-lucide="heart"></i> by Ajay</p>
+        </div>
     </footer>
 
     <!-- Scroll to Top Button -->

@@ -14,33 +14,27 @@
     
     <!-- Main CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    
+    <style>
+        .section-description {
+            text-align: center;
+            color: #9ca3af;
+            font-size: 1.1rem;
+            margin: -1rem auto 3rem;
+            max-width: 700px;
+            line-height: 1.6;
+        }
+    </style>
 </head>
 <body>
     <!-- Animated Background -->
     <div class="aurora-bg"></div>
 
-    <!-- Header -->
-    <header>
-        <nav>
-            <a href="/#home" class="logo">Your Name</a>
-            <ul class="nav-links">
-                <li><a href="/#about">About</a></li>
-                <li><a href="/#projects">Projects</a></li>
-                <li><a href="/#skills">Skills</a></li>
-                <li><a href="/#experience">Experience</a></li>
-                <li><a href="/#achievements">Achievements</a></li>
-                <li><a href="/#contact">Contact</a></li>
-            </ul>
-            <button class="mobile-menu-btn">
-                <i data-lucide="menu"></i>
-            </button>
-        </nav>
-    </header>
-
-    <main style="padding-top: 6rem;">
+    <main style="padding-top: 4rem;">
         <!-- Projects Section -->
-        <section id="projects" style="padding-top: 2rem;">
-            <h1 class="section-heading">All Projects</h1>
+        <section id="projects" style="padding: 4rem 1.5rem;">
+            <h1 class="section-heading" style="display: block; visibility: visible; opacity: 1;">All Projects</h1>
+            <p class="section-description">Explore my portfolio of AI/ML solutions and innovative applications</p>
             
             <div class="projects-grid">
                 {% for project in projects %}

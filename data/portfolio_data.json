@@ -1,0 +1,129 @@
+{
+  "about": {
+    "name": "Ajay Kumar",
+    "title": "AI/ML Developer & Tech Enthusiast",
+    "description": [
+      "I'm a passionate Computer Science student specializing in Artificial Intelligence and Machine Learning. My journey in tech is driven by a desire to create intelligent systems that solve real-world problems and make a meaningful impact.",
+      "From data collection and preprocessing to model training and deployment, I thrive on working across the entire machine learning pipeline. I'm proficient in Python and its powerful libraries like TensorFlow, PyTorch, and Scikit-learn.",
+      "I believe in continuous learning, collaborative innovation, and building solutions that matter. Currently seeking opportunities to apply my skills and contribute to impactful AI/ML projects."
+    ],
+    "stats": {
+      "years": "3+",
+      "projects": "10+",
+      "technologies": "5+"
+    }
+  },
+  "projects": [
+    {
+      "id": "1",
+      "title": "Real-Time Face Mask Detection",
+      "short_desc": "A CNN model to detect face masks in live video, achieving 98% accuracy.",
+      "image_url": "https://placehold.co/600x400/1a1a3d/c084fc?text=Project+1",
+      "overview": "This project involves building and training a Convolutional Neural Network (CNN) to accurately identify whether a person in a live video feed is wearing a face mask. The goal was to create a fast and reliable system that could be deployed in public spaces to help enforce safety regulations.",
+      "challenges": "One of the main challenges was handling false positives (e.g., a hand near the face being detected as a mask). This was addressed by refining the dataset and implementing a more complex CNN architecture with additional convolutional layers to better capture facial features.",
+      "tech_stack": ["Python", "TensorFlow & Keras", "OpenCV", "Scikit-learn", "NumPy"],
+      "github_url": "#",
+      "demo_url": "#"
+    },
+    {
+      "id": "2",
+      "title": "Movie Recommendation System",
+      "short_desc": "Collaborative filtering engine using SVD to suggest movies to users.",
+      "image_url": "https://placehold.co/600x400/1a1a3d/c084fc?text=Project+2",
+      "overview": "This project showcases a recommendation engine built using collaborative filtering techniques. It analyzes user-item interaction data (movie ratings) to predict and recommend new movies to users, leveraging the Singular Value Decomposition (SVD) algorithm for matrix factorization.",
+      "challenges": "A key challenge was the sparsity of the user-item matrix. This was mitigated by using dimensionality reduction techniques inherent in SVD, allowing the model to find latent features and make more robust recommendations.",
+      "tech_stack": ["Python", "Pandas", "Scikit-learn", "Flask", "NumPy"],
+      "github_url": "#",
+      "demo_url": "#"
+    },
+    {
+      "id": "3",
+      "title": "Sentiment Analysis on Reviews",
+      "short_desc": "An NLP model using LSTMs to classify product reviews as positive or negative.",
+      "image_url": "https://placehold.co/600x400/1a1a3d/c084fc?text=Project+3",
+      "overview": "This Natural Language Processing (NLP) project focuses on classifying text sentiment. A Recurrent Neural Network (RNN) with Long Short-Term Memory (LSTM) units was trained on a large dataset of product reviews to determine whether the sentiment of a review is positive or negative.",
+      "challenges": "Handling nuances of language like sarcasm and context was difficult. The solution involved using pre-trained word embeddings (like GloVe) to provide the model with a richer understanding of word semantics from the start.",
+      "tech_stack": ["Python", "TensorFlow & Keras", "NLTK", "Pandas", "Scikit-learn"],
+      "github_url": "#",
+      "demo_url": "#"
+    },
+    {
+      "id": "4",
+      "title": "Image Style Transfer",
+      "short_desc": "Using GANs to apply the style of one image to the content of another.",
+      "image_url": "https://placehold.co/600x400/1a1a3d/c084fc?text=Project+4",
+      "overview": "This project explores the creative application of Generative Adversarial Networks (GANs). The model learns to separate the content of an image from its artistic style, allowing it to recompose the original content image with the style of a different artwork.",
+      "challenges": "Achieving stable training with GANs was the primary difficulty. This was overcome by implementing specific techniques like spectral normalization and using a well-structured discriminator and generator architecture (like CycleGAN).",
+      "tech_stack": ["Python", "PyTorch", "NumPy", "Pillow"],
+      "github_url": "#",
+      "demo_url": "#"
+    },
+    {
+      "id": "5",
+      "title": "Automated Text Summarizer",
+      "short_desc": "An extractive summarization tool using TF-IDF and sentence scoring.",
+      "image_url": "https://placehold.co/600x400/1a1a3d/c084fc?text=Project+5",
+      "overview": "This tool condenses long articles into a few key sentences. It works by calculating the TF-IDF (Term Frequency-Inverse Document Frequency) score for words, scoring sentences based on the weight of the words they contain, and selecting the top-scoring sentences to form the summary.",
+      "challenges": "Ensuring the summary is coherent and grammatically correct was a challenge for this extractive method. While not perfect, the model's output was improved by ranking sentences not just by score but also by their original position in the text.",
+      "tech_stack": ["Python", "NLTK", "Scikit-learn", "spaCy"],
+      "github_url": "#",
+      "demo_url": "#"
+    }
+  ],
+  "skills": {
+    "languages": ["Python", "JavaScript", "SQL"],
+    "aiml": ["TensorFlow", "PyTorch", "Scikit-learn", "Keras"],
+    "datascience": ["Pandas", "NumPy", "OpenCV", "Matplotlib"],
+    "tools": ["Git & GitHub", "Docker", "AWS"]
+  },
+  "experience": [
+    {
+      "id": "1",
+      "date": "June 2024 - August 2024",
+      "duration": "3 months",
+      "title": "Data Science Intern",
+      "company": "Tech Solutions Inc.",
+      "achievements": [
+        "Engineered data preprocessing pipelines for customer churn model, handling 100K+ records",
+        "Developed interactive visualizations uncovering 5 key customer behavior patterns",
+        "Built logistic regression model achieving 85% accuracy"
+      ],
+      "skills": ["Python", "Pandas", "Scikit-learn", "Matplotlib"]
+    },
+    {
+      "id": "2",
+      "date": "January 2024 - May 2024",
+      "duration": "5 months",
+      "title": "ML Research Assistant",
+      "company": "University AI Lab",
+      "achievements": [
+        "Implemented CNN architectures achieving 92% accuracy on custom datasets",
+        "Conducted research on object detection algorithms (YOLO, R-CNN)",
+        "Curated 5,000+ images for training datasets"
+      ],
+      "skills": ["TensorFlow", "Computer Vision", "OpenCV"]
+    }
+  ],
+  "achievements": {
+    "achievements": [
+      {
+        "title": "Winner, Smart India Hackathon 2024",
+        "description": "Developed an AI-powered solution for waste management."
+      },
+      {
+        "title": "5-Star Coder on CodeChef",
+        "description": "Consistently ranked in the top tier of competitive programmers."
+      }
+    ],
+    "certifications": [
+      {
+        "title": "Deep Learning Specialization",
+        "details": "Coursera & deeplearning.ai - 2024"
+      },
+      {
+        "title": "Machine Learning by Stanford University",
+        "details": "Coursera - 2023"
+      }
+    ]
+  }
+}
