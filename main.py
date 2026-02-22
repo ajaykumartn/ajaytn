@@ -53,6 +53,25 @@ app.add_middleware(SessionMiddleware, secret_key=os.getenv('SECRET_KEY', 'your-s
 # Templates
 templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
+# Add custom template context
+@app.middleware("http")
+async def add_static_url(request: Request, call_next):
+    """Add url_for function to request state"""
+    response = await call_next(request)
+    return response
+
+# Custom url_for function for templates
+def url_for_static(path: str) -> str:
+    """Generate static file URLs"""
+    return f"/static/{path}"
+
+# Add custom functions to Jinja2 environment
+templates.env.globals['url_for'] = lambda name, **kwargs: (
+    f"/static/{kwargs.get('filename', '')}" if name == "static"
+    else f"/{name.replace('_', '-')}" if 'project_id' not in kwargs
+    else f"/project/{kwargs.get('project_id', '')}"
+)
+
 # Configuration
 UPLOAD_FOLDER = BASE_DIR / "static" / "uploads" / "projects"
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
